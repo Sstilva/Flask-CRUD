@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	{% include 'alert.html' %}
+
+	<h1>Clients page</h1>
+  <h3>Updating client - {{client_to_update}} </h3>
+	<br/>
+	<div class="shadow p-3 mb-5 bg-body rounded">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ form.phone.label(class="form-label") }}
+            {{ form.phone(class="form-control", value=client_to_update.client_phone) }}
+            <br/>
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control", value=client_to_update.client_name) }}
+            <br/>
+            {{ form.company.label(class="form-label") }}
+            {{ form.company(class="form-control", value=client_to_update.client_company) }}
+            <br/>
+            {{ form.submit(class="btn btn-secondary") }}
+        </form>
+    </div>
+{% endblock %}
