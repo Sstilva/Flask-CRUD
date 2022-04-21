@@ -1,29 +1,22 @@
 from flask import Flask, render_template, flash, request
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+#from flask_wtf import FlaskForm
+#from wtforms import StringField, SubmitField
+#from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, ClientModel
+from forms import ClientForm, RequestForm, EmployeeForm
 
 
 # Initiating the app
 app = Flask(__name__)
 
+# Configuring the PostgreSQL database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:root@localhost:5432/advert_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'many bytes'
 db.init_app(app)
 migrate = Migrate(app, db)
-
-
-class ClientForm(FlaskForm):
-	phone = StringField("Phone", validators=[DataRequired()])
-	name = StringField("Name", validators=[DataRequired()])
-	company = StringField("Company")
-	submit = SubmitField("Submit")
-	edit = SubmitField("Edit")
-	delete = SubmitField("Delete")
 
 
 @app.route('/')
