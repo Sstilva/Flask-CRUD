@@ -56,6 +56,29 @@ def add_client():
 		our_clients=our_clients)
 
 
+
+@app.route('/clients/delete/<string:client_phone>')
+def delete_client(client_phone):
+	name = None
+	form = ClientForm()
+	client_to_delete = ClientModel.query.get_or_404(client_phone)
+	try: 
+		db.session.delete(client_to_delete)
+		db.session.commit()
+		flash("Запись о клиенте успешно удалена")
+		our_clients = ClientModel.query.order_by(ClientModel.client_name).all()
+		return render_template('clients.html',
+			form=form,
+			name=name,
+			our_clients=our_clients)
+	except:
+		flash("Не удалось удалить запись о клиенте")
+		return render_template('clients.html',
+			form=form,
+			name=name,
+			our_clients=our_clients)
+
+
 @app.route('/clients/update/<string:client_phone>', methods=['GET', 'POST'])
 def update_client(client_phone):
 	form = ClientForm()
@@ -78,8 +101,9 @@ def update_client(client_phone):
 	else:
 		return render_template('client_update.html',
 				form=form,
-				client_to_update=client_to_update)
+				client_to_update=client_to_update,
+				client_phone=client_phone)
 
 
-#if __name__ == "__main__":
-	#app.run(debug=True)
+if __name__ == "__main__":
+	app.run()

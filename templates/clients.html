@@ -37,7 +37,7 @@
             <td>{{ client.client_name }}</td>
             <td>{{ client.client_company }}</td>
             <td colspan="2"><a href="{{ url_for('update_client', client_phone=client.client_phone) }}">{{ form.edit(class="btn btn-secondary") }}</a> 
-            {{ form.delete(class="btn btn-secondary") }}</td>
+            <a href="{{ url_for('delete_client', client_phone=client.client_phone) }}">{{ form.delete(class="btn btn-secondary") }}</a></td>
         </tr>
         {% endfor %}
       </tbody>

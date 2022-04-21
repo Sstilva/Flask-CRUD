@@ -20,6 +20,7 @@
             {{ form.company(class="form-control", value=client_to_update.client_company) }}
             <br/>
             {{ form.submit(class="btn btn-secondary") }}
+            <a href="{{ url_for('delete_client', client_phone=client_phone) }}" class="btn btn-secondary">Delete</a>
         </form>
     </div>
 {% endblock %}
