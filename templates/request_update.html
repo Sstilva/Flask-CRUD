@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	{% include 'alert.html' %}
+
+	<h1>Requests page</h1>
+  <h3>Updating request - {{request_to_update}} </h3>
+	<br/>
+	<div class="shadow p-3 mb-5 bg-body rounded">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ form.id.label(class="form-label") }}
+            {{ form.id(class="form-control") }}
+            <br/>
+            {{ form.client_phone.label(class="form-label") }}
+            {{ form.client_phone(class="form-control") }}
+            <br/>
+            {{ form.employee_phone.label(class="form-label") }}
+            {{ form.employee_phone(class="form-control") }}
+            <br/>
+            {{ form.request_type.label(class="form-label") }}
+            {{ form.request_type(class="form-control") }}
+            <br/>
+            {{ form.request_start_date.label(class="form-label") }}
+            {{ form.request_start_date(class="form-control") }}
+            <br/>
+            {{ form.request_finish_date.label(class="form-label") }}
+            {{ form.request_finish_date(class="form-control") }}
+            <br/>
+            {{ form.submit(class="btn btn-secondary") }}
+            <a href="{{ url_for('delete_request', id=id) }}" class="btn btn-secondary">Delete</a>
+        </form>
+    </div>
+{% endblock %}

@@ -15,8 +15,8 @@ class RequestForm(FlaskForm):
 	client_phone = StringField("Client phone", validators=[DataRequired()])
 	employee_phone = StringField("Employee phone", validators=[DataRequired()])
 	request_type = StringField("Request type", validators=[DataRequired()])
-	request_start_date = StringField("Start date")
-	request_finish_date = StringField("Finish date")
+	request_start_date = StringField("Start date", validators=[DataRequired()])
+	request_finish_date = StringField("Finish date", validators=[DataRequired()])
 	submit = SubmitField("Submit")
 
 

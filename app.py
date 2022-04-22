@@ -4,7 +4,7 @@ from flask import Flask, render_template, flash, request
 #from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from models import db, ClientModel
+from models import db, ClientModel, RequestModel
 from forms import ClientForm, RequestForm, EmployeeForm
 
 
@@ -96,6 +96,91 @@ def update_client(client_phone):
 				form=form,
 				client_to_update=client_to_update,
 				client_phone=client_phone)
+
+
+@app.route('/requests', methods=['GET', 'POST'])
+def add_request():
+	name = None
+	form = RequestForm()
+	if form.validate_on_submit():
+		id = form.id.data
+		client_phone = form.client_phone.data
+		employee_phone = form.employee_phone.data
+		request_type = form.request_type.data
+		request_start_date = form.request_start_date.data
+		request_finish_date  = form.request_finish_date.data
+		request = RequestModel(
+			id=id,
+			client_phone = client_phone,
+			employee_phone = employee_phone,
+			request_type = request_type,
+			request_start_date = request_start_date,
+			request_finish_date = request_finish_date)
+		db.session.add(request)
+		db.session.commit()
+		form.id.data = ''
+		form.client_phone.data = ''
+		form.employee_phone.data = ''
+		form.request_type.data = ''
+		form.request_start_date.data = ''
+		form.request_finish_date.data = ''
+		flash("Запись о заявке успешно добавлена")
+	our_requests = RequestModel.query.order_by(RequestModel.id).all()
+	return render_template('requests.html',
+		form=form,
+		name=name,
+		our_requests=our_requests)
+
+
+@app.route('/requests/delete/<int:id>')
+def delete_request(id):
+	name = None
+	form = RequestForm()
+	request_to_delete = RequestModel.query.get_or_404(id)
+	try: 
+		db.session.delete(request_to_delete)
+		db.session.commit()
+		flash("Запись о заявке успешно удалена")
+		our_requests = RequestModel.query.order_by(RequestModel.id).all()
+		return render_template('requests.html',
+			form=form,
+			name=name,
+			our_requests=our_requests)
+	except:
+		flash("Не удалось удалить запись о заявке")
+		return render_template('requests.html',
+			form=form,
+			name=name,
+			our_requests=our_requests)
+
+
+@app.route('/requests/update/<int:id>', methods=['POST', 'GET'])
+def update_request(id):
+	form = RequestForm()
+	request_to_update = RequestModel.query.get_or_404(id)
+	if request.method == "POST":
+		request_to_update.id = request.form['id']
+		request_to_update.client_phone = request.form['client_phone']
+		request_to_update.employee_phone = request.form['employee_phone']
+		request_to_update.request_type = request.form['request_type']
+		request_to_update.request_start_date = request.form['request_start_date']
+		request_to_update.request_finish_date = request.form['request_finish_date']
+		try: 
+			db.session.commit()
+			flash("Запись о заявке успешно изменена")
+			return render_template('request_update.html',
+				form=form,
+				request_to_update=request_to_update)
+		except:
+			flash("Не удалось изменить запись о клиенте")
+			return render_template('request_update.html',
+				form=form,
+				request_to_update=request_to_update)
+	else:
+		return render_template('request_update.html',
+				form=form,
+				request_to_update=request_to_update,
+				id=id)
 
 
 if __name__ == "__main__":

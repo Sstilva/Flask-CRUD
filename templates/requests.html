@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	{% include 'alert.html' %}
+
+	<h1>Requests page</h1>
+	<br/>
+	<div class="shadow p-3 mb-5 bg-body rounded">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ form.id.label(class="form-label") }}
+            {{ form.id(class="form-control") }}
+            <br/>
+            {{ form.client_phone.label(class="form-label") }}
+            {{ form.client_phone(class="form-control") }}
+            <br/>
+            {{ form.employee_phone.label(class="form-label") }}
+            {{ form.employee_phone(class="form-control") }}
+            <br/>
+            {{ form.request_type.label(class="form-label") }}
+            {{ form.request_type(class="form-control") }}
+            <br/>
+            {{ form.request_start_date.label(class="form-label") }}
+            {{ form.request_start_date(class="form-control") }}
+            <br/>
+            {{ form.request_finish_date.label(class="form-label") }}
+            {{ form.request_finish_date(class="form-control") }}
+            <br/>
+            {{ form.submit(class="btn btn-secondary") }}
+        </form>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          	<th scope="col">ID</th>
+          	<th scope="col">Client phone</th>
+          	<th scope="col">Employee phone</th>
+          	<th scope="col">Request type</th>
+            <th scope="col">Start date</th>
+            <th scope="col">Finish date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for request in our_requests %}
+        <tr>
+            <td>{{ request.id }}</td>
+            <td>{{ request.client_phone }}</td>
+            <td>{{ request.employee_phone }}</td>
+            <td>{{ request.request_type }}</td>
+            <td>{{ request.request_start_date }}</td>
+            <td>{{ request.request_finish_date }}</td>
+            <td colspan="2"><a href="{{ url_for('update_request', id=request.id) }}" class="btn btn-secondary">Edit</a>              
+            <a href="{{ url_for('delete_request', id=request.id) }}" class="btn btn-secondary">Delete</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+{% endblock %}
