@@ -56,3 +56,30 @@ class RequestModel(db.Model):
 			self.request_type, 
 			self.request_start_date, 
 			self.request_finish_date)
+
+
+class EmployeeModel(db.Model):
+	__tablename__ = 'employees'
+
+	employee_phone = db.Column(db.String(20), primary_key=True)
+	employee_name = db.Column(db.String(50), nullable=False)
+	employee_department = db.Column(db.String(50))
+	employee_address = db.Column(db.String(100))
+
+	def __init__(self,
+		employee_phone,
+		employee_name,
+		employee_department,
+		employee_address):
+
+		self.employee_phone = employee_phone
+		self.employee_name = employee_name
+		self.employee_department = employee_department
+		self.employee_address = employee_address
+
+		def __repr__(self):
+			return "{} - {}. {}".format(
+				self.employee_phone, 
+				self.employee_name, 
+				self.employee_department)
+			

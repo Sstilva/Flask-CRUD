@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	{% include 'alert.html' %}
+
+	<h1>Employees page</h1>
+    <h3>Updating employee - {{employee_to_update.employee_name}} </h3>
+	<br/>
+	<div class="shadow p-3 mb-5 bg-body rounded">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ form.employee_phone.label(class="form-label") }}
+            {{ form.employee_phone(class="form-control", value=employee_to_update.employee_phone) }}
+            <br/>
+            {{ form.employee_name.label(class="form-label") }}
+            {{ form.employee_name(class="form-control", value=employee_to_update.employee_name) }}
+            <br/>
+            {{ form.employee_department.label(class="form-label") }}
+            {{ form.employee_department(class="form-control", value=employee_to_update.employee_department) }}
+            <br/>
+            {{ form.employee_address.label(class="form-label") }}
+            {{ form.employee_address(class="form-control", value=employee_to_update.employee_address) }}
+            <br/>
+            {{ form.submit(class="btn btn-secondary") }}
+            <a href="{{ url_for('delete_employee', employee_phone=employee_phone)}}", class="btn btn-secondary">Delete</a>
+        </form>
+    </div>
+{% endblock %}

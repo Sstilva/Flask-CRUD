@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	{% include 'alert.html' %}
+
+	<h1>Employees page</h1>
+	<br/>
+	<div class="shadow p-3 mb-5 bg-body rounded">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ form.employee_phone.label(class="form-label") }}
+            {{ form.employee_phone(class="form-control") }}
+            <br/>
+            {{ form.employee_name.label(class="form-label") }}
+            {{ form.employee_name(class="form-control") }}
+            <br/>
+            {{ form.employee_department.label(class="form-label") }}
+            {{ form.employee_department(class="form-control") }}
+            <br/>
+            {{ form.employee_address.label(class="form-label") }}
+            {{ form.employee_address(class="form-control") }}
+            <br/>
+            {{ form.submit(class="btn btn-secondary") }}
+        </form>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          	<th scope="col">Phone</th>
+          	<th scope="col">Name</th>
+          	<th scope="col">Department</th>
+          	<th scope="col">Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for employee in our_employees %}
+        <tr>
+            <td>{{ employee.employee_phone }}</td>
+            <td>{{ employee.employee_name }}</td>
+            <td>{{ employee.employee_department }}</td>
+            <td>{{ employee.employee_address }}</td>
+            <td colspan="2"><a href="{{ url_for('update_employee', employee_phone=employee.employee_phone) }}" class="btn btn-secondary">Edit</a>
+            <a href="{{ url_for('delete_employee', employee_phone=employee.employee_phone) }}" class="btn btn-secondary">Delete</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+{% endblock %}

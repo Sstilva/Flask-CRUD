@@ -1,10 +1,7 @@
 from flask import Flask, render_template, flash, request
-#from flask_wtf import FlaskForm
-#from wtforms import StringField, SubmitField
-#from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from models import db, ClientModel, RequestModel
+from models import db, ClientModel, RequestModel, EmployeeModel
 from forms import ClientForm, RequestForm, EmployeeForm
 
 
@@ -181,6 +178,83 @@ def update_request(id):
 				form=form,
 				request_to_update=request_to_update,
 				id=id)
+
+
+@app.route('/employees', methods=['POST', 'GET'])
+def add_employee():
+	name = None
+	form = EmployeeForm()
+	if form.validate_on_submit():
+		employee_phone = form.employee_phone.data
+		employee_name = form.employee_name.data
+		employee_department = form.employee_department.data
+		employee_address = form.employee_address.data
+		employee = EmployeeModel(
+			employee_phone=employee_phone,
+			employee_name = employee_name,
+			employee_department = employee_department,
+			employee_address = employee_address)
+		db.session.add(employee)
+		db.session.commit()
+		form.employee_phone.data = ''
+		form.employee_name.data = ''
+		form.employee_department.data = ''
+		form.employee_address.data = ''
+		flash("Запись о сотруднике успешно добавлена")
+	our_employees = EmployeeModel.query.order_by(EmployeeModel.employee_phone).all()
+	return render_template('employees.html',
+		form=form,
+		name=name,
+		our_employees=our_employees)
+
+
+@app.route('/employees/delete/<string:employee_phone>')
+def delete_employee(employee_phone):
+	name = None
+	form = EmployeeForm()
+	employee_to_delete = EmployeeModel.query.get_or_404(employee_phone)
+	try: 
+		db.session.delete(employee_to_delete)
+		db.session.commit()
+		flash("Запись о сотруднике успешно удалена")
+		our_employees = EmployeeModel.query.order_by(EmployeeModel.employee_phone).all()
+		return render_template('employees.html',
+			form=form,
+			name=name,
+			our_employees=our_employees)
+	except:
+		flash("Не удалось удалить запись о работнике")
+		return render_template('employees.html',
+			form=form,
+			name=name,
+			our_employees=our_employees)
+
+
+@app.route('/employees/update/<string:employee_phone>', methods=['POST', 'GET'])
+def update_employee(employee_phone):
+	form = EmployeeForm()
+	employee_to_update = EmployeeModel.query.get_or_404(employee_phone)
+	if request.method == "POST":
+		employee_to_update.employee_phone = request.form['employee_phone']
+		employee_to_update.employee_name = request.form['employee_name']
+		employee_to_update.employee_department = request.form['employee_department']
+		employee_to_update.employee_address = request.form['employee_address']
+		try: 
+			db.session.commit()
+			flash("Запись о сотруднике успешно изменена")
+			return render_template('employee_update.html',
+				form=form,
+				employee_to_update=employee_to_update)
+		except:
+			flash("Не удалось изменить запись о сотруднике")
+			return render_template('employee_update.html',
+				form=form,
+				employee_to_update=employee_to_update)
+	else:
+		return render_template('employee_update.html',
+				form=form,
+				employee_to_update=employee_to_update,
+				employee_phone=employee_phone)
 
 
 if __name__ == "__main__":

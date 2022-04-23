@@ -11,22 +11,22 @@
             {{ form.hidden_tag() }}
 
             {{ form.id.label(class="form-label") }}
-            {{ form.id(class="form-control") }}
+            {{ form.id(class="form-control", value=request_to_update.id) }}
             <br/>
             {{ form.client_phone.label(class="form-label") }}
-            {{ form.client_phone(class="form-control") }}
+            {{ form.client_phone(class="form-control", value=request_to_update.client_phone) }}
             <br/>
             {{ form.employee_phone.label(class="form-label") }}
-            {{ form.employee_phone(class="form-control") }}
+            {{ form.employee_phone(class="form-control", value=request_to_update.employee_phone) }}
             <br/>
             {{ form.request_type.label(class="form-label") }}
-            {{ form.request_type(class="form-control") }}
+            {{ form.request_type(class="form-control", value=request_to_update.request_type) }}
             <br/>
             {{ form.request_start_date.label(class="form-label") }}
-            {{ form.request_start_date(class="form-control") }}
+            {{ form.request_start_date(class="form-control", value=request_to_update.request_start_date) }}
             <br/>
             {{ form.request_finish_date.label(class="form-label") }}
-            {{ form.request_finish_date(class="form-control") }}
+            {{ form.request_finish_date(class="form-control", value=request_to_update.request_finish_date) }}
             <br/>
             {{ form.submit(class="btn btn-secondary") }}
             <a href="{{ url_for('delete_request', id=id) }}" class="btn btn-secondary">Delete</a>
